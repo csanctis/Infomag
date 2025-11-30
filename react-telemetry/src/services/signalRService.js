@@ -6,8 +6,11 @@ class SignalRService {
   }
 
   createConnection() {
+    const token = localStorage.getItem('token');
     this.connection = new signalR.HubConnectionBuilder()
-      .withUrl(process.env.REACT_APP_SIGNALR_HUB_URL)
+      .withUrl(process.env.REACT_APP_SIGNALR_HUB_URL, {
+        accessTokenFactory: () => token
+      })
       .build();
     return this.connection;
   }

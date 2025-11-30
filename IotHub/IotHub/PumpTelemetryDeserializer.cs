@@ -28,6 +28,20 @@ namespace IotHub
             }
         }
 
+        /*
+         Key functionalities
+            Device-to-cloud communication: Devices can securely send telemetry data to the cloud for processing, analysis, and storage. 
+            Device provisioning and management: It helps register and provision devices, and provides capabilities for over-the-air updates. 
+            Security: IoT hubs offer secure authentication and encrypted data transfer to protect against unauthorized access and data tampering. 
+            Scalability: They are designed to handle millions of devices and messages, with varying service tiers to meet different needs. 
+        How it works
+            A physical device, like a sensor or appliance, sends data to the IoT hub. 
+            The IoT hub authenticates the device and encrypts the data. 
+            The hub then routes the data to other cloud-based services for processing, such as real-time analysis or long-term storage. 
+            The application on the cloud can send commands back to the devices via the hub to perform actions. 
+        Common use cases
+            Industrial automation: Monitor machine performance and predict maintenance needs.
+         */
         public override IEnumerable<PumpTelemetry> Deserialize(Stream stream)
         {
             using (var sr = new StreamReader(stream))
@@ -56,6 +70,16 @@ namespace IotHub
                             {
                                 try
                                 {
+                                    /*
+                                        This is the simplest method for basic data materialization and aggregations. 
+                                        Locate Event Hub: In the Azure portal, navigate to your Event Hubs instance.
+                                        Process Data: Under "Features," select "Process Data."
+                                        Materialize in Cosmos DB: Choose "Materialize data in Cosmos DB" and provide a name for your Stream Analytics job.
+                                        Configure Input & Output: Configure the Event Hub as the input and your Cosmos DB account, database, and container as the output.
+                                        Define Transformations (Optional): If needed, you can use the editor to filter, project, or aggregate data before writing to Cosmos DB.
+                                        Start Job: Save and start the Stream Analytics job.
+
+                                     */
                                     await eventHubService.SendTelemetryAsync(telemetry);
                                 }
                                 catch (Exception ex)
