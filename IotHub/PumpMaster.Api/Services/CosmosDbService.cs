@@ -8,7 +8,7 @@ using IotHub.Models;
 
 namespace PumpMaster.Api.Services
 {
-    public class CosmosDbService
+    public class CosmosDbService : ICosmosDbService
     {
         private readonly CosmosClient _cosmosClient;
         private readonly Container _container;
@@ -128,6 +128,23 @@ namespace PumpMaster.Api.Services
             using var iterator = _container.GetItemQueryIterator<PumpSummary>(query);
             
             while (iterator.HasMoreResults)
+            {
+                var response = await iterator.ReadNextAsync();
+                results.AddRange(response);
+            }
+            return results;
+        }
+
+        public async Task<List<PumpTelemetry>> GetRecentTelemetryAsync(int hours = 24)
+        {
+            var query = new QueryDefinition(
+                "SELECT * FROM c WHERE c.timestamp >= @startTime ORDER BY c.timestamp DESC OFFSET 0 LIMIT 50")
+                .WithParameter("@startTime", DateTime.UtcNow.AddHours(-hours));
+
+            var results = new List<PumpTelemetry>();
+            using var iterator = _container.GetItemQueryIterator<PumpTelemetry>(query);
+            
+            while (iterator.HasMoreResults && results.Count < 50)
             {
                 var response = await iterator.ReadNextAsync();
                 results.AddRange(response);

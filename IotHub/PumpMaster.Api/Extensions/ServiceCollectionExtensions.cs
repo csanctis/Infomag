@@ -32,7 +32,7 @@ namespace PumpMaster.Api.Extensions
                 return new CosmosClient(connectionString, options);
             });
 
-            services.AddSingleton<CosmosDbService>(provider =>
+            services.AddSingleton<ICosmosDbService>(provider =>
             {
                 var cosmosClient = provider.GetRequiredService<CosmosClient>();
                 var logger = provider.GetRequiredService<ILogger<CosmosDbService>>();
@@ -80,7 +80,7 @@ namespace PumpMaster.Api.Extensions
 
         public static IServiceCollection AddApplicationServices(this IServiceCollection services)
         {
-            services.AddScoped<TelemetryBroadcastService>();
+            services.AddScoped<ITelemetryBroadcastService, TelemetryBroadcastService>();
             services.AddSignalR();
             services.AddControllers();
             services.AddEndpointsApiExplorer();

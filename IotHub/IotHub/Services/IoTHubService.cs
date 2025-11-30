@@ -6,7 +6,7 @@ using IotHub.Models;
 
 namespace IotHub.Services
 {
-    public class IoTHubService
+    public class IoTHubService : IIoTHubService
     {
         private readonly string _connectionString;
         private DeviceClient _deviceClient;

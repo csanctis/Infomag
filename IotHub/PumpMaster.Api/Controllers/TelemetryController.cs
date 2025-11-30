@@ -10,9 +10,9 @@ namespace PumpMaster.Api.Controllers
     [Authorize]
     public class TelemetryController : ControllerBase
     {
-        private readonly CosmosDbService _cosmosDbService;
+        private readonly ICosmosDbService _cosmosDbService;
 
-        public TelemetryController(CosmosDbService cosmosDbService)
+        public TelemetryController(ICosmosDbService cosmosDbService)
         {
             _cosmosDbService = cosmosDbService;
         }
@@ -45,6 +45,13 @@ namespace PumpMaster.Api.Controllers
         {
             var summaries = await _cosmosDbService.GetPumpSummariesAsync();
             return Ok(summaries);
+        }
+
+        [HttpGet]
+        public async Task<ActionResult<List<PumpTelemetry>>> GetAllTelemetry([FromQuery] int hours = 24)
+        {
+            var telemetry = await _cosmosDbService.GetRecentTelemetryAsync(hours);
+            return Ok(telemetry);
         }
     }
 }

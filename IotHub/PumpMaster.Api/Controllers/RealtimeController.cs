@@ -12,11 +12,11 @@ namespace PumpMaster.Api.Controllers
     [Authorize]
     public class RealtimeController : ControllerBase
     {
-        private readonly TelemetryBroadcastService _broadcastService;
-        private readonly CosmosDbService _cosmosDbService;
+        private readonly ITelemetryBroadcastService _broadcastService;
+        private readonly ICosmosDbService _cosmosDbService;
         private readonly Random _random = new Random();
 
-        public RealtimeController(TelemetryBroadcastService broadcastService, CosmosDbService cosmosDbService)
+        public RealtimeController(ITelemetryBroadcastService broadcastService, ICosmosDbService cosmosDbService)
         {
             _broadcastService = broadcastService;
             _cosmosDbService = cosmosDbService;

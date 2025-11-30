@@ -4,7 +4,7 @@ using IotHub.Models;
 
 namespace PumpMaster.Api.Services
 {
-    public class TelemetryBroadcastService
+    public class TelemetryBroadcastService : ITelemetryBroadcastService
     {
         private readonly IHubContext<TelemetryHub> _hubContext;
 

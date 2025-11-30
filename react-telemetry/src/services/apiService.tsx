@@ -16,5 +16,15 @@ export const apiService = {
       throw new Error('Simulation failed');
     }
     return response;
+  },
+
+  async getTelemetryData(): Promise<any[]> {
+    const response = await fetch(`${process.env.REACT_APP_API_BASE_URL}/telemetry`, {
+      headers: getAuthHeaders()
+    });
+    if (!response.ok) {
+      throw new Error('Failed to fetch telemetry data');
+    }
+    return response.json();
   }
 };

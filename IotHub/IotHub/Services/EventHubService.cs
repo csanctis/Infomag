@@ -8,7 +8,7 @@ using IotHub.Models;
 
 namespace IotHub.Services
 {
-    public class EventHubService : IDisposable
+    public class EventHubService : IEventHubService
     {
         private readonly EventHubProducerClient _producerClient;
 
