@@ -13,17 +13,17 @@ builder.Services.AddSingleton<CosmosClient>(provider =>
     var connectionString = builder.Configuration.GetConnectionString("CosmosDb");
     var options = new CosmosClientOptions
     {
-        MaxRetryAttemptsOnRateLimitedRequests = 3,
-        MaxRetryWaitTimeOnRateLimitedRequests = TimeSpan.FromSeconds(30),
-        ConnectionMode = ConnectionMode.Direct,
-        RequestTimeout = TimeSpan.FromSeconds(10),
+        MaxRetryAttemptsOnRateLimitedRequests = 5,
+        MaxRetryWaitTimeOnRateLimitedRequests = TimeSpan.FromSeconds(60),
+        ConnectionMode = ConnectionMode.Gateway,
+        RequestTimeout = TimeSpan.FromSeconds(30),
         HttpClientFactory = () =>
         {
             var handler = new HttpClientHandler()
             {
                 ServerCertificateCustomValidationCallback = (sender, cert, chain, sslPolicyErrors) => true
             };
-            return new HttpClient(handler);
+            return new HttpClient(handler) { Timeout = TimeSpan.FromSeconds(30) };
         }
     };
     return new CosmosClient(connectionString, options);

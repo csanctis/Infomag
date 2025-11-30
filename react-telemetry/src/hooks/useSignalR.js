@@ -8,14 +8,21 @@ export const useSignalR = () => {
   useEffect(() => {
     const connection = signalRService.createConnection();
 
+    // Register event handler before starting connection
+    signalRService.onTelemetryUpdate((data) => {
+      console.log('Received telemetry:', data);
+      setTelemetry(prev => [data, ...prev.slice(0, 14)]);
+    });
+
     signalRService.startConnection()
       .then(() => {
         setStatus('Connected');
-        signalRService.onTelemetryUpdate((data) => {
-          setTelemetry(prev => [data, ...prev.slice(0, 9)]);
-        });
+        console.log('SignalR connected successfully');
       })
-      .catch(() => setStatus('Connection failed'));
+      .catch((error) => {
+        console.error('SignalR connection failed:', error);
+        setStatus('Connection failed');
+      });
 
     return () => {
       connection?.stop();
