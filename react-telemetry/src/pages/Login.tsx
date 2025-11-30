@@ -1,4 +1,5 @@
 import React from 'react';
+import { Container, Box } from '@mui/material';
 import LoginForm from '../components/LoginForm';
 
 interface LoginProps {
@@ -7,9 +8,11 @@ interface LoginProps {
 
 const Login: React.FC<LoginProps> = ({ onLogin }) => {
   return (
-    <div style={{ fontFamily: 'Arial' }}>
-      <LoginForm onLogin={onLogin} />
-    </div>
+    <Container maxWidth="sm">
+      <Box display="flex" justifyContent="center" alignItems="center" minHeight="100vh">
+        <LoginForm onLogin={onLogin} />
+      </Box>
+    </Container>
   );
 };
 

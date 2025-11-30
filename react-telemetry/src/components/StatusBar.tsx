@@ -1,4 +1,6 @@
 import React from 'react';
+import { Box, Typography, Button, Chip } from '@mui/material';
+import { PlayArrow, Logout } from '@mui/icons-material';
 import { apiService } from '../services/apiService';
 
 interface StatusBarProps {
@@ -16,17 +18,30 @@ const StatusBar: React.FC<StatusBarProps> = ({ status, onLogout }) => {
   };
 
   return (
-    <div style={{ marginBottom: '20px', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-      <div>
-        <span>Status: {status}</span>
-        <button onClick={handleSimulate} style={{ marginLeft: '20px' }}>
+    <Box display="flex" justifyContent="space-between" alignItems="center" mb={3}>
+      <Box display="flex" alignItems="center" gap={2}>
+        <Typography variant="body1">Status:</Typography>
+        <Chip 
+          label={status} 
+          color={status === 'Connected' ? 'success' : 'warning'}
+          variant="outlined"
+        />
+        <Button 
+          variant="contained" 
+          startIcon={<PlayArrow />}
+          onClick={handleSimulate}
+        >
           Simulate Data
-        </button>
-      </div>
-      <button onClick={onLogout} style={{ padding: '5px 10px' }}>
+        </Button>
+      </Box>
+      <Button 
+        variant="outlined" 
+        startIcon={<Logout />}
+        onClick={onLogout}
+      >
         Logout
-      </button>
-    </div>
+      </Button>
+    </Box>
   );
 };
 
