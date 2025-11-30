@@ -8,7 +8,7 @@ using EventHubProducer.Models;
 
 namespace EventHubProducer
 {
-    public class EventHubPublisher : IDisposable
+    public class EventHubPublisher : IEventHubPublisher
     {
         private readonly EventHubProducerClient producerClient;
         private bool disposed;
