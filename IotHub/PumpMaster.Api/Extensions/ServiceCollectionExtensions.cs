@@ -35,7 +35,9 @@ namespace PumpMaster.Api.Extensions
             {
                 var cosmosClient = provider.GetRequiredService<CosmosClient>();
                 var logger = provider.GetRequiredService<ILogger<CosmosDbService>>();
-                return new CosmosDbService(cosmosClient, "PumpMaster", "telemetry", logger);
+                var databaseName = configuration["CosmosDb:DatabaseName"];
+                var containerName = configuration["CosmosDb:ContainerName"];
+                return new CosmosDbService(cosmosClient, databaseName, containerName, logger);
             });
 
             return services;
@@ -70,13 +72,14 @@ namespace PumpMaster.Api.Extensions
             return services;
         }
 
-        public static IServiceCollection AddCorsPolicy(this IServiceCollection services)
+        public static IServiceCollection AddCorsPolicy(this IServiceCollection services, IConfiguration configuration)
         {
             services.AddCors(options =>
             {
                 options.AddDefaultPolicy(policy =>
                 {
-                    policy.WithOrigins("http://localhost:3000")
+                    var allowedOrigins = configuration.GetSection("Cors:AllowedOrigins").Get<string[]>();
+                    policy.WithOrigins(allowedOrigins)
                           .AllowAnyHeader()
                           .AllowAnyMethod()
                           .AllowCredentials();

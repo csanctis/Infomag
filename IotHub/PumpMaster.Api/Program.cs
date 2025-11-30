@@ -7,7 +7,7 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddCosmosDb(builder.Configuration);
 builder.Services.AddJwtAuthentication(builder.Configuration);
 builder.Services.AddApplicationServices();
-builder.Services.AddCorsPolicy();
+builder.Services.AddCorsPolicy(builder.Configuration);
 
 var app = builder.Build();
 
