@@ -1,6 +1,8 @@
-import React from 'react';
+import React, { useState } from 'react';
+import PumpModal from './PumpModal';
 
 const TelemetryList = ({ telemetry }) => {
+  const [selectedPump, setSelectedPump] = useState(null);
   const containerStyle = {
     maxHeight: '500px',
     overflowY: 'auto',
@@ -8,6 +10,7 @@ const TelemetryList = ({ telemetry }) => {
   };
 
   return (
+    <>
     <div style={containerStyle}>
       <table style={{ width: '100%', borderCollapse: 'collapse', display: 'table' }}>
       <thead style={{ display: 'table-header-group', position: 'sticky', top: 0, backgroundColor: '#f5f5f5' }}>
@@ -23,7 +26,7 @@ const TelemetryList = ({ telemetry }) => {
       </thead>
       <tbody style={{ display: 'table-row-group' }}>
         {telemetry.map((data, index) => (
-          <tr key={index} style={{ backgroundColor: data.status === 'Warning' ? '#fff3cd' : '#d4edda' }}>
+          <tr key={index} style={{ backgroundColor: data.status === 'Warning' ? '#fff3cd' : '#d4edda', cursor: 'pointer' }} onClick={() => setSelectedPump(data)}>
             <td style={{ border: '1px solid #ccc', padding: '8px' }}>{data.deviceId}</td>
             <td style={{ border: '1px solid #ccc', padding: '8px' }}>{data.status}</td>
             <td style={{ border: '1px solid #ccc', padding: '8px' }}>{data.temperature?.toFixed(1)}</td>
@@ -36,6 +39,8 @@ const TelemetryList = ({ telemetry }) => {
       </tbody>
     </table>
     </div>
+    <PumpModal pump={selectedPump} onClose={() => setSelectedPump(null)} />
+    </>
   );
 };
 
