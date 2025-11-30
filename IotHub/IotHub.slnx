@@ -1,4 +1,8 @@
 <Solution>
+  <Project Path="EventHubProducer/EventHubProducer.csproj" />
   <Project Path="IotHub/IotHub.csproj" />
   <Project Path="PumpMaster.Api/PumpMaster.Api.csproj" />
+  <Project Path="Tests/EventHubProducer.Tests/EventHubProducer.Tests.csproj" />
+  <Project Path="Tests/IotHub.Tests/IotHub.Tests.csproj" />
+  <Project Path="Tests/PumpMaster.Api.Tests/PumpMaster.Api.Tests.csproj" />
 </Solution>
