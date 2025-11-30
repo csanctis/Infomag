@@ -69,6 +69,8 @@ namespace PumpMaster.Api.Extensions
             services.AddScoped<TelemetryBroadcastService>();
             services.AddSignalR();
             services.AddControllers();
+            services.AddEndpointsApiExplorer();
+            services.AddSwaggerGen();
             return services;
         }
 
