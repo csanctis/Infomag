@@ -31,6 +31,9 @@ RUN wget -q https://aka.ms/cosmosdb-emulator -O /tmp/cosmosdb-emulator.deb \
 
 COPY --from=publish /app/publish .
 
+# Copy Docker configuration
+COPY appsettings.Docker.json /app/appsettings.json
+
 # Start CosmosDB Emulator and API
 COPY start.sh /app/start.sh
 RUN chmod +x /app/start.sh

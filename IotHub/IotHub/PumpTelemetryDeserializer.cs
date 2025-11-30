@@ -78,7 +78,6 @@ namespace IotHub
                                         Configure Input & Output: Configure the Event Hub as the input and your Cosmos DB account, database, and container as the output.
                                         Define Transformations (Optional): If needed, you can use the editor to filter, project, or aggregate data before writing to Cosmos DB.
                                         Start Job: Save and start the Stream Analytics job.
-
                                      */
                                     await eventHubService.SendTelemetryAsync(telemetry);
                                 }
