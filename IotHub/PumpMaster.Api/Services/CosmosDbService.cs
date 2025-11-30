@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.Azure.Cosmos;
+using Microsoft.Extensions.Logging;
 using IotHub.Models;
 
 namespace PumpMaster.Api.Services
@@ -11,21 +12,50 @@ namespace PumpMaster.Api.Services
     {
         private readonly CosmosClient _cosmosClient;
         private readonly Container _container;
+        private readonly ILogger<CosmosDbService> _logger;
 
-        public CosmosDbService(string connectionString, string databaseName, string containerName)
+        public CosmosDbService(CosmosClient cosmosClient, string databaseName, string containerName, ILogger<CosmosDbService> logger = null)
         {
-            _cosmosClient = new CosmosClient(connectionString);
+            _cosmosClient = cosmosClient;
+            _logger = logger;
+            InitializeDatabaseAsync(databaseName, containerName).GetAwaiter().GetResult();
             _container = _cosmosClient.GetContainer(databaseName, containerName);
         }
 
-        public async Task StoreTelemetryAsync(PumpTelemetry telemetry)
+        private async Task InitializeDatabaseAsync(string databaseName, string containerName)
         {
-            await _container.CreateItemAsync(telemetry, new PartitionKey(telemetry.DeviceId));
+            try
+            {
+                await _cosmosClient.CreateDatabaseIfNotExistsAsync(databaseName);
+                var database = _cosmosClient.GetDatabase(databaseName);
+                await database.CreateContainerIfNotExistsAsync(containerName, "/deviceId");
+                _logger?.LogInformation("CosmosDB database and container initialized successfully");
+            }
+            catch (Exception ex)
+            {
+                _logger?.LogError(ex, "Failed to initialize CosmosDB database and container");
+                throw;
+            }
         }
 
         public async Task AddTelemetryAsync(PumpTelemetry telemetry)
         {
-            await _container.CreateItemAsync(telemetry, new PartitionKey(telemetry.DeviceId));
+            try
+            {
+                _logger?.LogInformation("Adding telemetry for device {DeviceId}", telemetry.DeviceId);
+                await _container.CreateItemAsync(telemetry, new PartitionKey(telemetry.DeviceId));
+                _logger?.LogInformation("Successfully added telemetry for device {DeviceId}", telemetry.DeviceId);
+            }
+            catch (CosmosException ex)
+            {
+                _logger?.LogError(ex, "CosmosDB error adding telemetry for device {DeviceId}: {StatusCode}", telemetry.DeviceId, ex.StatusCode);
+                throw;
+            }
+            catch (Exception ex)
+            {
+                _logger?.LogError(ex, "Unexpected error adding telemetry for device {DeviceId}", telemetry.DeviceId);
+                throw;
+            }
         }
 
         public async Task<List<PumpTelemetry>> GetTelemetryByDeviceAsync(string deviceId, int hours = 24)

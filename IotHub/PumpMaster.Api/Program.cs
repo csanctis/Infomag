@@ -2,15 +2,38 @@ using PumpMaster.Api.Services;
 using PumpMaster.Api.Hubs;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
+using Microsoft.Azure.Cosmos;
 using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
-builder.Services.AddSingleton<CosmosDbService>(provider =>
+builder.Services.AddSingleton<CosmosClient>(provider =>
 {
     var connectionString = builder.Configuration.GetConnectionString("CosmosDb");
-    return new CosmosDbService(connectionString, "PumpMaster", "telemetry");
+    var options = new CosmosClientOptions
+    {
+        MaxRetryAttemptsOnRateLimitedRequests = 3,
+        MaxRetryWaitTimeOnRateLimitedRequests = TimeSpan.FromSeconds(30),
+        ConnectionMode = ConnectionMode.Direct,
+        RequestTimeout = TimeSpan.FromSeconds(10),
+        HttpClientFactory = () =>
+        {
+            var handler = new HttpClientHandler()
+            {
+                ServerCertificateCustomValidationCallback = (sender, cert, chain, sslPolicyErrors) => true
+            };
+            return new HttpClient(handler);
+        }
+    };
+    return new CosmosClient(connectionString, options);
+});
+
+builder.Services.AddSingleton<CosmosDbService>(provider =>
+{
+    var cosmosClient = provider.GetRequiredService<CosmosClient>();
+    var logger = provider.GetRequiredService<ILogger<CosmosDbService>>();
+    return new CosmosDbService(cosmosClient, "PumpMaster", "telemetry", logger);
 });
 
 builder.Services.AddScoped<TelemetryBroadcastService>();

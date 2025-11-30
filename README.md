@@ -52,6 +52,10 @@ Website will be available at: `http://localhost:3000`
 
 [CosmosDb Emulator](https://learn.microsoft.com/en-us/azure/cosmos-db/emulator)
 
+**Access Details:**
+- Port: 8081 (HTTPS)
+- URL: https://localhost:8081
+- Data Explorer: https://localhost:8081/_explorer/index.html
 
 ```bash
 cd IotHub
