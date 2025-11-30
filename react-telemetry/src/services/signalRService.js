@@ -7,7 +7,7 @@ class SignalRService {
 
   createConnection() {
     this.connection = new signalR.HubConnectionBuilder()
-      .withUrl('http://localhost:5000/telemetryHub')
+      .withUrl(process.env.REACT_APP_SIGNALR_HUB_URL)
       .build();
     return this.connection;
   }

@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Authorization;
 using PumpMaster.Api.Services;
 using IotHub.Models;
 
@@ -6,6 +7,7 @@ namespace PumpMaster.Api.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
+    [Authorize]
     public class RealtimeController : ControllerBase
     {
         private readonly TelemetryBroadcastService _broadcastService;
