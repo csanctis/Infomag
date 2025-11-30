@@ -48,13 +48,17 @@ Website will be available at: `http://localhost:3000`
 - Username: `admin`
 - Password: `password123`
 
-### 5. Docker (Alternative)
+### 5. Docker with CosmosDB (Alternative)
+
+[CosmosDb Emulator](https://learn.microsoft.com/en-us/azure/cosmos-db/emulator)
+
 
 ```bash
-cd IotHub/PumpMaster.Api
-docker build -t pumpmaster-api .
-docker run -p 8080:8080 pumpmaster-api
+cd IotHub
+docker-compose up --build
 ```
+
+This will start both the API and CosmosDB emulator. API available at: `http://localhost:8080`
 
 ## Architecture
 

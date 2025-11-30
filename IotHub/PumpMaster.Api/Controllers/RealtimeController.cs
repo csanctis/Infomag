@@ -1,7 +1,9 @@
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Authorization;
-using PumpMaster.Api.Services;
 using IotHub.Models;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.Azure.Devices;
+using PumpMaster.Api.Services;
+using System;
 
 namespace PumpMaster.Api.Controllers
 {
@@ -12,6 +14,7 @@ namespace PumpMaster.Api.Controllers
     {
         private readonly TelemetryBroadcastService _broadcastService;
         private readonly CosmosDbService _cosmosDbService;
+        private readonly Random _random = new Random();
 
         public RealtimeController(TelemetryBroadcastService broadcastService, CosmosDbService cosmosDbService)
         {
@@ -31,16 +34,21 @@ namespace PumpMaster.Api.Controllers
         {
             var telemetry = new PumpTelemetry
             {
-                DeviceId = "pump-001",
+                DeviceId = "pump-" + _random.NextDouble(),
                 Timestamp = DateTime.UtcNow,
-                Temperature = 75.5,
-                Pressure = 15.2,
-                FlowRate = 120.0,
-                Vibration = 2.1,
-                Status = "Normal",
-                Location = new Location { Latitude = -26.6500, Longitude = 153.0667 }
+                Temperature = 20 + _random.NextDouble() * 60,
+                Pressure = 10 + _random.NextDouble() * 40,
+                FlowRate = 50 + _random.NextDouble() * 100,
+                Vibration = _random.NextDouble() * 5,
+                Status = _random.Next(100) < 50 ? "Normal" : "Warning",
+                Location = new Location
+                {
+                    Latitude = -26.6500 + (_random.NextDouble() - 0.5) * 0.1,
+                    Longitude = 153.0667 + (_random.NextDouble() - 0.5) * 0.1
+                }
             };
 
+            await _cosmosDbService.AddTelemetryAsync(telemetry);
             await _broadcastService.BroadcastTelemetryAsync(telemetry);
             return Ok(telemetry);
         }

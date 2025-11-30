@@ -23,6 +23,11 @@ namespace PumpMaster.Api.Services
             await _container.CreateItemAsync(telemetry, new PartitionKey(telemetry.DeviceId));
         }
 
+        public async Task AddTelemetryAsync(PumpTelemetry telemetry)
+        {
+            await _container.CreateItemAsync(telemetry, new PartitionKey(telemetry.DeviceId));
+        }
+
         public async Task<List<PumpTelemetry>> GetTelemetryByDeviceAsync(string deviceId, int hours = 24)
         {
             var query = new QueryDefinition(
