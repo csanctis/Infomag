@@ -34,7 +34,7 @@ namespace PumpMaster.Api.Controllers
         {
             var telemetry = new PumpTelemetry
             {
-                DeviceId = "pump-" + _random.NextDouble(),
+                DeviceId = "pump-" + _random.Next(1000, 9999),
                 Timestamp = DateTime.UtcNow,
                 Temperature = 20 + _random.NextDouble() * 60,
                 Pressure = 10 + _random.NextDouble() * 40,

@@ -1,6 +1,10 @@
 import React from 'react';
 
-const TelemetryCard = ({ data }) => {
+interface TelemetryCardProps {
+  data: any;
+}
+
+const TelemetryCard: React.FC<TelemetryCardProps> = ({ data }) => {
   const cardStyle = {
     border: '1px solid #ccc',
     padding: '10px',

@@ -2,14 +2,14 @@ import { useState, useEffect } from 'react';
 import signalRService from '../services/signalRService';
 
 export const useSignalR = () => {
-  const [status, setStatus] = useState('Disconnected');
-  const [telemetry, setTelemetry] = useState([]);
+  const [status, setStatus] = useState<string>('Disconnected');
+  const [telemetry, setTelemetry] = useState<any[]>([]);
 
   useEffect(() => {
     const connection = signalRService.createConnection();
 
     // Register event handler before starting connection
-    signalRService.onTelemetryUpdate((data) => {
+    signalRService.onTelemetryUpdate((data: any) => {
       console.log('Received telemetry:', data);
       setTelemetry(prev => [data, ...prev.slice(0, 14)]);
     });
@@ -19,7 +19,7 @@ export const useSignalR = () => {
         setStatus('Connected');
         console.log('SignalR connected successfully');
       })
-      .catch((error) => {
+      .catch((error: any) => {
         console.error('SignalR connection failed:', error);
         setStatus('Connection failed');
       });

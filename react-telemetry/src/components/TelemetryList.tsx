@@ -1,11 +1,15 @@
 import React, { useState } from 'react';
 import PumpModal from './PumpModal';
 
-const TelemetryList = ({ telemetry }) => {
-  const [selectedPump, setSelectedPump] = useState(null);
+interface TelemetryListProps {
+  telemetry: any[];
+}
+
+const TelemetryList: React.FC<TelemetryListProps> = ({ telemetry }) => {
+  const [selectedPump, setSelectedPump] = useState<any>(null);
   const containerStyle = {
     maxHeight: '500px',
-    overflowY: 'auto',
+    overflowY: 'auto' as const,
     border: '1px solid #ccc',
   };
 

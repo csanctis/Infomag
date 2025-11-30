@@ -3,7 +3,11 @@ import { useSignalR } from '../hooks/useSignalR';
 import StatusBar from '../components/StatusBar';
 import TelemetryList from '../components/TelemetryList';
 
-const Dashboard = ({ onLogout }) => {
+interface DashboardProps {
+  onLogout: () => void;
+}
+
+const Dashboard: React.FC<DashboardProps> = ({ onLogout }) => {
   const { status, telemetry } = useSignalR();
 
   return (

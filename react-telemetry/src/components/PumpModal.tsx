@@ -1,10 +1,15 @@
 import React from 'react';
 
-const PumpModal = ({ pump, onClose }) => {
+interface PumpModalProps {
+  pump: any;
+  onClose: () => void;
+}
+
+const PumpModal: React.FC<PumpModalProps> = ({ pump, onClose }) => {
   if (!pump) return null;
 
   const modalStyle = {
-    position: 'fixed',
+    position: 'fixed' as const,
     top: 0,
     left: 0,
     width: '100%',

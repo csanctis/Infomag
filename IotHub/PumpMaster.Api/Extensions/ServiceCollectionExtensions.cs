@@ -23,7 +23,8 @@ namespace PumpMaster.Api.Extensions
                     {
                         var handler = new HttpClientHandler()
                         {
-                            ServerCertificateCustomValidationCallback = (sender, cert, chain, sslPolicyErrors) => true
+                            ServerCertificateCustomValidationCallback = (sender, cert, chain, sslPolicyErrors) => true,
+                            UseProxy = false
                         };
                         return new HttpClient(handler) { Timeout = TimeSpan.FromSeconds(30) };
                     }
@@ -57,6 +58,19 @@ namespace PumpMaster.Api.Extensions
                         ValidIssuer = configuration["Jwt:Issuer"],
                         ValidAudience = configuration["Jwt:Audience"],
                         IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(configuration["Jwt:Key"]))
+                    };
+                    options.Events = new JwtBearerEvents
+                    {
+                        OnMessageReceived = context =>
+                        {
+                            var accessToken = context.Request.Query["access_token"];
+                            var path = context.HttpContext.Request.Path;
+                            if (!string.IsNullOrEmpty(accessToken) && path.StartsWithSegments("/telemetryHub"))
+                            {
+                                context.Token = accessToken;
+                            }
+                            return Task.CompletedTask;
+                        }
                     };
                 });
 

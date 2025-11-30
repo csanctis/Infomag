@@ -1,7 +1,12 @@
 import React from 'react';
 import { apiService } from '../services/apiService';
 
-const StatusBar = ({ status, onLogout }) => {
+interface StatusBarProps {
+  status: string;
+  onLogout: () => void;
+}
+
+const StatusBar: React.FC<StatusBarProps> = ({ status, onLogout }) => {
   const handleSimulate = async () => {
     try {
       await apiService.simulateTelemetry();

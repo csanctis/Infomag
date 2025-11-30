@@ -1,4 +1,4 @@
-const getAuthHeaders = () => {
+const getAuthHeaders = (): Record<string, string> => {
   const token = localStorage.getItem('token');
   return {
     'Content-Type': 'application/json',
@@ -7,7 +7,7 @@ const getAuthHeaders = () => {
 };
 
 export const apiService = {
-  async simulateTelemetry() {
+  async simulateTelemetry(): Promise<Response> {
     const response = await fetch(`${process.env.REACT_APP_API_BASE_URL}/realtime/simulate`, {
       method: 'POST',
       headers: getAuthHeaders()

@@ -1,5 +1,5 @@
 export const authService = {
-  async login(username, password) {
+  async login(username: string, password: string): Promise<string> {
     const response = await fetch(`${process.env.REACT_APP_API_BASE_URL}/auth/login`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
@@ -15,15 +15,15 @@ export const authService = {
     return data.token;
   },
 
-  logout() {
+  logout(): void {
     localStorage.removeItem('token');
   },
 
-  getToken() {
+  getToken(): string | null {
     return localStorage.getItem('token');
   },
 
-  isAuthenticated() {
+  isAuthenticated(): boolean {
     return !!this.getToken();
   }
 };
