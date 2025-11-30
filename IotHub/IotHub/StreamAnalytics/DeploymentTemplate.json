@@ -1,0 +1,39 @@
+{
+  "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "streamAnalyticsJobName": {
+      "type": "string",
+      "defaultValue": "pumpmaster-stream-analytics"
+    },
+    "iotHubName": {
+      "type": "string"
+    }
+  },
+  "resources": [
+    {
+      "type": "Microsoft.StreamAnalytics/streamingjobs",
+      "apiVersion": "2020-03-01",
+      "name": "[parameters('streamAnalyticsJobName')]",
+      "location": "[resourceGroup().location]",
+      "properties": {
+        "sku": {
+          "name": "Standard"
+        },
+        "outputErrorPolicy": "stop",
+        "eventsOutOfOrderPolicy": "adjust",
+        "eventsOutOfOrderMaxDelayInSeconds": 0,
+        "eventsLateArrivalMaxDelayInSeconds": 5,
+        "dataLocale": "en-US",
+        "compatibilityLevel": "1.2",
+        "transformation": {
+          "name": "Transformation",
+          "properties": {
+            "streamingUnits": 3,
+            "query": "-- Query will be loaded from PumpAnalyticsQueries.sql"
+          }
+        }
+      }
+    }
+  ]
+}

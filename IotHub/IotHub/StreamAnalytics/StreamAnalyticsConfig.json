@@ -1,0 +1,82 @@
+{
+  "inputs": [
+    {
+      "name": "iothub-input",
+      "type": "Microsoft.StreamAnalytics/streamingjobs/inputs",
+      "properties": {
+        "type": "Stream",
+        "datasource": {
+          "type": "Microsoft.Devices/IotHubs",
+          "properties": {
+            "iotHubNamespace": "pumpmaster-iothub",
+            "sharedAccessPolicyName": "iothubowner",
+            "endpoint": "messages/events",
+            "consumerGroupName": "$Default"
+          }
+        },
+        "serialization": {
+          "type": "Json",
+          "properties": {
+            "encoding": "UTF8"
+          }
+        }
+      }
+    }
+  ],
+  "outputs": [
+    {
+      "name": "realtime-output",
+      "type": "Microsoft.StreamAnalytics/streamingjobs/outputs",
+      "properties": {
+        "datasource": {
+          "type": "Microsoft.ServiceBus/EventHub",
+          "properties": {
+            "eventHubNamespace": "pumpmaster-eventhub",
+            "eventHubName": "realtime-telemetry"
+          }
+        }
+      }
+    },
+    {
+      "name": "alerts-output",
+      "type": "Microsoft.StreamAnalytics/streamingjobs/outputs",
+      "properties": {
+        "datasource": {
+          "type": "Microsoft.ServiceBus/EventHub",
+          "properties": {
+            "eventHubNamespace": "pumpmaster-eventhub",
+            "eventHubName": "pump-alerts"
+          }
+        }
+      }
+    },
+    {
+      "name": "analytics-output",
+      "type": "Microsoft.StreamAnalytics/streamingjobs/outputs",
+      "properties": {
+        "datasource": {
+          "type": "Microsoft.Sql/servers/databases",
+          "properties": {
+            "server": "pumpmaster-sql.database.windows.net",
+            "database": "PumpAnalytics",
+            "table": "TelemetryAggregates"
+          }
+        }
+      }
+    },
+    {
+      "name": "cosmosdb-output",
+      "type": "Microsoft.StreamAnalytics/streamingjobs/outputs",
+      "properties": {
+        "datasource": {
+          "type": "Microsoft.Storage/DocumentDB",
+          "properties": {
+            "accountId": "pumpmaster-cosmos",
+            "database": "PumpMaster",
+            "collectionNamePattern": "telemetry"
+          }
+        }
+      }
+    }
+  ]
+}

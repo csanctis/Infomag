@@ -1,0 +1,4 @@
+<Solution>
+  <Project Path="IotHub/IotHub.csproj" />
+  <Project Path="PumpMaster.Api/PumpMaster.Api.csproj" />
+</Solution>

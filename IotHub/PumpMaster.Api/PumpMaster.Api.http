@@ -1,0 +1,6 @@
+@PumpMaster.Api_HostAddress = http://localhost:5016
+
+GET {{PumpMaster.Api_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
